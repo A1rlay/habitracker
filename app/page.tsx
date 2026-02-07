@@ -1,10 +1,10 @@
-import CreateCard from "./_components/CreateCard";
+import CardModal from "./_components/CardModal";
 
 export default function main() {
   return (
     <>
       <div className="flex justify-center">
-        <CreateCard />
+        <CardModal />
       </div>
     </>
   );
