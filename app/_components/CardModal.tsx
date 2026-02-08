@@ -7,12 +7,15 @@ type Card = {
   description: string;
 };
 
-function ItemRow({ id, name, description }: Card) {
+function ItemRow({ id, name, description, onEdit }: Card & { onEdit: () => void }) {
   return (
     <div className="bg-[#656d4a] text-[#f9f9f9] py-4 px-8 rounded-2xl mb-8 min-w-64 max-w-3/4 m-auto">
-      <h3 className="font-bold text-xl">
-        {id}. {name}
-      </h3>
+      <div className="flex justify-between">
+        <h3 className="font-bold text-xl">
+          {id}. {name}
+        </h3>
+        <button onClick={onEdit}>Edit</button>
+      </div>
       <p>{description}</p>
     </div>
   );
@@ -21,17 +24,29 @@ function ItemRow({ id, name, description }: Card) {
 export default function CreateCard() {
   const [cards, setCards] = useState<Card[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   const openModal = () => {
+    setEditingId(null);
     setName("");
     setDescription("");
     setIsOpen(true);
   }
 
-  const closeModal = () => setIsOpen(false);
+  const openEditModal = (card: Card) => {
+    setEditingId(card.id);
+    setName(card.name);
+    setDescription(card.description);
+    setIsOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setEditingId(null);
+  }
 
   const saveCard = () => {
     const trimmedName = name.trim();
@@ -39,14 +54,20 @@ export default function CreateCard() {
 
     if (!trimmedName || !trimmedDescription) return;
 
-    setCards(prev => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        name: trimmedName,
-        description: trimmedDescription,
-      },
-    ]);
+    setCards(prev => {
+      if (editingId === null) {
+        return [
+          ...prev,
+          {
+            id: prev.length + 1,
+            name: trimmedName,
+            description: trimmedDescription,
+          },
+        ];
+      }
+
+      return prev.map(c => c.id === editingId ? { ...c, name: trimmedName, description: trimmedDescription } : c);
+    });
 
     closeModal();
   };
@@ -71,7 +92,7 @@ export default function CreateCard() {
   return (
     <div className="mt-20">
       {cards.map(c => (
-        <ItemRow key={c.id} id={c.id} name={c.name} description={c.description} />
+        <ItemRow key={c.id} id={c.id} name={c.name} description={c.description} onEdit={() => openEditModal(c)} />
       ))}
 
       <button
