@@ -9,8 +9,8 @@ type Card = {
 
 function ItemRow({ id, name, description }: Card) {
   return (
-    <div>
-      <h3>
+    <div className="bg-[#656d4a] text-[#f9f9f9] py-4 px-8 rounded-2xl mb-8">
+      <h3 className="font-bold text-xl">
         {id}. {name}
       </h3>
       <p>{description}</p>
@@ -57,7 +57,7 @@ export default function CreateCard() {
         <ItemRow key={c.id} id={c.id} name={c.name} description={c.description} />
       ))}
 
-      <button onClick={openModal} className="block mt-16">Add card</button>
+      <button onClick={openModal} className="block mt-16 mb-24 bg-[#656d4a] px-6 py-2 rounded-2xl text-[#f9f9f9] m-auto">Add card</button>
 
       {isOpen && (
         <div
@@ -70,31 +70,31 @@ export default function CreateCard() {
             onClick={e => e.stopPropagation()}
             className="w-full max-w-[480] bg-[#7f5539] text-[#f9f9f9] rounded-xl p-16"
           >
-            <h2 className="m-0 text-[1.25em]">Create card</h2>
+            <h2 className="m-0 text-[1.25em] font-semibold">Create card</h2>
 
             <label className="block mt-4">
               Title
               <input
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="w-full p-2 mt-6 bg-[#a68a64]"
-                placeholder="MVP for personal project"
+                className="w-full p-2 mt-2 bg-[#a68a64] text-sm"
+                placeholder="FundMiner"
               />
             </label>
 
-            <label style={{ display: "block", marginTop: 12 }}>
+            <label className="block mt-4">
               Description
               <textarea
                 value={description}
                 onChange={e => setDescription(e.target.value)}
-                className="w-full p-2 mt-6 bg-[#a68a64]"
-                placeholder="What is this card about?"
+                className="w-full p-2 mt-2 bg-[#a68a64] text-sm"
+                placeholder="Complete FUN-1392"
               />
             </label>
 
-            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 16 }}>
-              <button onClick={closeModal}>Cancel</button>
-              <button onClick={saveCard} disabled={!name.trim() || !description.trim()}>
+            <div className="flex gap-8 justify-end mt-8">
+              <button onClick={closeModal} className="hover:cursor-pointer">Cancel</button>
+              <button onClick={saveCard} disabled={!name.trim() || !description.trim()} className="hover:cursor-pointer">
                 Save
               </button>
             </div>
